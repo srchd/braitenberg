@@ -5,6 +5,7 @@ import pygame
 from lib.pygame_plotter import *
 from lib.objects.car import Car
 from lib.objects.controller import Controller
+from lib.objects.light_source import LightSource
 
 
 class MainWindow:
@@ -35,6 +36,9 @@ class MainWindow:
         path_to_controller = 'images/controller.png'
         self.controller = Controller(0, 0, path_to_controller)
 
+        path_to_light_source = 'images/light_source.png'
+        self.light_source = LightSource(333, 333, path_to_light_source, 3)
+
     def run(self) -> None:
         finished = False
 
@@ -61,5 +65,6 @@ class MainWindow:
             draw_checkerboard_background(self.surface, self.background_image, self.scaling_factor)
             self.car.draw(self.surface)
             self.controller.draw(self.car)
+            self.light_source.draw(self.surface, self.scaling_factor)
 
             pygame.display.update()
