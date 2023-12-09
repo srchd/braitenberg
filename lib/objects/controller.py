@@ -11,4 +11,5 @@ class Controller(DrawableObject):
         new_rect = self.img.get_rect()
         new_rect.centerx = 240
         new_rect.centery = 62
+
         car.img.blit(self.img, new_rect)
