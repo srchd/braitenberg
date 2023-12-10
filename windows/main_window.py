@@ -44,7 +44,7 @@ class MainWindow:
         self.controller = Controller(0, 0, path_to_controller)
 
         path_to_light_source = 'images/light_source.png'
-        self.light_source = LightSource(333, 333, path_to_light_source, 3)
+        self.light_source = LightSource(333, 333, path_to_light_source, 9)
 
         path_to_sensor = 'images/sensor.png'
         left_sensor_offset_vector = pygame.math.Vector2(40, 150)  # Offset vector form the center of the car
@@ -70,15 +70,18 @@ class MainWindow:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     finished = True
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_w:
-                        self.car.move(-20)
-                    if event.key == pygame.K_s:
-                        self.car.move(20)
-                    if event.key == pygame.K_a:
-                        self.car.rotate_object(10)
-                    if event.key == pygame.K_d:
-                        self.car.rotate_object(-10)
+                """
+                Controlling with keyboard, only for testing purposes.
+                """
+                # if event.type == pygame.KEYDOWN:
+                #     if event.key == pygame.K_w:
+                #         self.car.move(-20)
+                #     if event.key == pygame.K_s:
+                #         self.car.move(20)
+                #     if event.key == pygame.K_a:
+                #         self.car.rotate_object(10)
+                #     if event.key == pygame.K_d:
+                #         self.car.rotate_object(-10)
 
             draw_checkerboard_background(self.surface, self.background_image, self.scaling_factor)
             self.car.draw(self.surface)
@@ -86,5 +89,11 @@ class MainWindow:
             self.left_sensor.draw(self.car, self.surface)
             self.right_sensor.draw(self.car, self.surface)
             self.light_source.draw(self.surface, self.scaling_factor)
+            
+            if not self.car.has_stopped():
+                left_light = self.left_sensor.check_light(self.light_source.light_sources)
+                right_light = self.right_sensor.check_light(self.light_source.light_sources)
+                print(f"LEFT:    {left_light}      RIGHT:    {right_light}")
+                self.controller.control_car(self.car, right_light, left_light)
 
             pygame.display.update()

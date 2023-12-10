@@ -22,6 +22,7 @@ class Car(DrawableObject):
         self.x -= self.img.get_height() / 2
         self.y -= self.img.get_width() / 2
         self.rotation = 90
+        self.stopped = False
 
     def draw(self, surface: pygame.Surface) -> None:
         """
@@ -53,3 +54,14 @@ class Car(DrawableObject):
         self.y -= vel * math.sin(math.radians(self.rotation + 180))
 
         return
+    
+    def stop(self) -> None:
+        """Stops the car"""
+        self.stopped = True
+
+    def has_stopped(self) -> bool:
+        """
+        Returns:
+            self.stopped (bool): Represents if the car has stopped moving or not.
+        """
+        return self.stopped

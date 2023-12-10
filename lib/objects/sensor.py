@@ -2,6 +2,7 @@ import pygame
 
 from lib.objects.drawable_object import DrawableObject
 from lib.objects.car import Car
+from lib.objects.light_source import LightSource
 
 
 class Sensor(DrawableObject):
@@ -39,8 +40,30 @@ class Sensor(DrawableObject):
         # Rotates the image, the offset vector, and adding the vector to the pivot point
         rotated_image = pygame.transform.rotozoom(self.img, self.rotation, 1)
         rotated_offset = self.offset_vector.rotate(-self.rotation)
-        rect = rotated_image.get_rect(center=(car.x, car.y)+rotated_offset)
+        self.rect = rotated_image.get_rect(center=(car.x, car.y)+rotated_offset)
 
-        surface.blit(rotated_image, rect)
+        pygame.draw.rect(surface, (0, 255, 0), self.rect)
+
+        surface.blit(rotated_image, self.rect)
 
         return
+    
+    def check_light(self, light_sources: list[(LightSource, pygame.Rect)]) -> int:
+        """
+        Checks the sorruinding for light. Returns the alpha value, if found, otherwise 0.
+
+        Parameters:
+            light_sources (list[(LightSource, pygame.Rect)]): A list of (LightSource, rect) tuples. Checks the rect for collision.
+
+        Returns:
+            alpha (int): The alpha value for the collided LightSource.
+        """
+        alpha = 0
+
+        for light_source, rect in light_sources:
+            light_rect = rect
+
+            if self.rect.colliderect(light_rect):
+                alpha = max(light_source.get_alpha(), alpha)
+
+        return alpha

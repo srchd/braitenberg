@@ -23,6 +23,8 @@ class LightSource(DrawableObject):
         # size = radius * 2 + 1 -> the length of the rectangle
         self.alpha_array = create_multi_dimensional_fading_array(self.radius * 2 + 1, 255, 125)
 
+        self.light_sources = []
+
     def draw(self, surface: pygame.Surface, scaling_factor: float) -> None:
         """
         Draws the LightSource.
@@ -51,8 +53,16 @@ class LightSource(DrawableObject):
                 alpha_x = int((x - start_x) / light_source.get_width())
                 alpha_y = int((y - start_y) / light_source.get_width())
 
-                light_source.set_alpha(self.alpha_array[alpha_x, alpha_y])
+                # Need to copy a surface, otherwise all the alpha values would be the last one.
+                plotting_light = light_source.copy()
 
-                surface.blit(light_source, (x, y))
+                plotting_light.set_alpha(self.alpha_array[alpha_x, alpha_y])
+
+                rect = plotting_light.get_rect()
+                rect.centerx = x
+                rect.centery = y
+                self.light_sources.append((plotting_light, rect))
+
+                surface.blit(plotting_light, (x, y))
 
         return
