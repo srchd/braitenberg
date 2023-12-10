@@ -26,7 +26,7 @@ class Controller(DrawableObject):
         new_rect = self.img.get_rect()
 
         # "Randomly" selected positions related to the car
-        new_rect.centerx = 240
+        new_rect.centerx = 220
         new_rect.centery = 62
 
         car.img.blit(self.img, new_rect)

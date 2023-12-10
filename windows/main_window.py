@@ -6,6 +6,7 @@ from lib.pygame_plotter import *
 from lib.objects.car import Car
 from lib.objects.controller import Controller
 from lib.objects.light_source import LightSource
+from lib.objects.sensor import Sensor
 
 
 class MainWindow:
@@ -45,6 +46,13 @@ class MainWindow:
         path_to_light_source = 'images/light_source.png'
         self.light_source = LightSource(333, 333, path_to_light_source, 3)
 
+        path_to_sensor = 'images/sensor.png'
+        left_sensor_offset_vector = pygame.math.Vector2(40, 150)  # Offset vector form the center of the car
+        self.left_sensor = Sensor(0, 0, path_to_sensor, left_sensor_offset_vector)
+
+        right_sensor_offset_vector = pygame.math.Vector2(-40, 150)  # Offset vector form the center of the car
+        self.right_sensor = Sensor(0, 0, path_to_sensor, right_sensor_offset_vector)
+
     def run(self) -> None:
         """
         Main function, which runs the simulation.
@@ -75,6 +83,8 @@ class MainWindow:
             draw_checkerboard_background(self.surface, self.background_image, self.scaling_factor)
             self.car.draw(self.surface)
             self.controller.draw(self.car)
+            self.left_sensor.draw(self.car, self.surface)
+            self.right_sensor.draw(self.car, self.surface)
             self.light_source.draw(self.surface, self.scaling_factor)
 
             pygame.display.update()
