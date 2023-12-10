@@ -7,6 +7,7 @@ from lib.objects.car import Car
 from lib.objects.controller import Controller
 from lib.objects.light_source import LightSource
 from lib.objects.sensor import Sensor
+from lib.enum_types import Wirings
 
 
 class MainWindow:
@@ -43,8 +44,8 @@ class MainWindow:
         path_to_controller = 'images/controller.png'
         self.controller = Controller(0, 0, path_to_controller)
 
-        path_to_light_source = 'images/light_source.png'
-        self.light_source = LightSource(333, 333, path_to_light_source, 9)
+        self.path_to_light_source = 'images/light_source.png'
+        self.light_source = LightSource(333, 333, self.path_to_light_source, 9)
 
         path_to_sensor = 'images/sensor.png'
         left_sensor_offset_vector = pygame.math.Vector2(40, 150)  # Offset vector form the center of the car
@@ -70,6 +71,11 @@ class MainWindow:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     finished = True
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 3:
+                        mouse_pos = pygame.mouse.get_pos()
+                        self.light_source = LightSource(mouse_pos[0], mouse_pos[1], self.path_to_light_source, 6)
                 """
                 Controlling with keyboard, only for testing purposes.
                 """
@@ -94,6 +100,6 @@ class MainWindow:
                 left_light = self.left_sensor.check_light(self.light_source.light_sources)
                 right_light = self.right_sensor.check_light(self.light_source.light_sources)
                 print(f"LEFT:    {left_light}      RIGHT:    {right_light}")
-                self.controller.control_car(self.car, right_light, left_light)
+                self.controller.control_car(self.car, right_light, left_light, wiring=Wirings.CROSS)
 
             pygame.display.update()

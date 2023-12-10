@@ -42,8 +42,6 @@ class Sensor(DrawableObject):
         rotated_offset = self.offset_vector.rotate(-self.rotation)
         self.rect = rotated_image.get_rect(center=(car.x, car.y)+rotated_offset)
 
-        pygame.draw.rect(surface, (0, 255, 0), self.rect)
-
         surface.blit(rotated_image, self.rect)
 
         return

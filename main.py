@@ -1,5 +1,4 @@
 # Python Modules Imports
-import pygame
 import os
 import sys
 

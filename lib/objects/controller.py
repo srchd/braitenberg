@@ -1,7 +1,6 @@
-import pygame
-
 from lib.objects.drawable_object import DrawableObject
 from lib.objects.car import Car
+from lib.enum_types import Wirings
 
 class Controller(DrawableObject):
     def __init__(self, x, y, img_path) -> None:
@@ -33,7 +32,7 @@ class Controller(DrawableObject):
 
         return
     
-    def control_car(self, car: Car, right_light, left_light) -> None:
+    def control_car(self, car: Car, right_light: int, left_light: int, wiring: Wirings=Wirings.CROSS) -> None:
         """
         Controls the Car. (Ideally the wheels, this might need to be refactored in such a way).
         Steers the car towards the light, and moves it a little as well.
@@ -43,23 +42,39 @@ class Controller(DrawableObject):
             car (Car): The car in question.
             right_light (int): The alpha value readed from the right light sensor.
             left_light (int): The alpha value readed from the left light sensor.
+            wiring (Wirings): Wiring, either paralell of cross.
         """
-        if right_light > left_light:
-            car.rotate_object(-1)
-            car.move(-1)
-        elif right_light < left_light:
-            car.rotate_object(1)
-            car.move(-1)
+        if wiring == Wirings.CROSS:
+            if right_light > left_light:
+                car.rotate_object(-1)
+                car.move(-1)
+            elif right_light < left_light:
+                car.rotate_object(1)
+                car.move(-1)
 
-        # Standard movement, going in circles, I call it idle movement.
-        elif right_light == 0 and left_light == 0:
-            car.rotate_object(1)
-            car.move(-2)
-        else:
-            car.move(-5)
+            # Standard movement, going in circles, I call it idle movement.
+            elif right_light == 0 and left_light == 0:
+                car.rotate_object(1)
+                car.move(-2)
+            else:
+                car.move(-5)
 
-            # If both sensors read the same 255 value, the car stops.
-            if right_light == 255 and left_light == 255:
-                car.stop()
+                # If both sensors read the same 255 value, the car stops.
+                if right_light == 255 and left_light == 255:
+                    car.stop()
+        elif wiring == Wirings.PARALELL:
+            if right_light > left_light:
+                car.rotate_object(1)
+                car.move(-1)
+            elif right_light < left_light:
+                car.rotate_object(-1)
+                car.move(-1)
+
+            # Standard movement, going in circles, I call it idle movement.
+            elif right_light == 0 and left_light == 0:
+                # car.rotate_object(1)
+                car.move(-2)
+            else:
+                car.move(-5)
 
         return

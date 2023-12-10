@@ -1,5 +1,4 @@
 import pygame
-import numpy as np
 
 from lib.objects.drawable_object import DrawableObject
 from lib.utils import create_multi_dimensional_fading_array
