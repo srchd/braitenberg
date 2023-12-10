@@ -1,1 +1,3 @@
-__all__ = ['Car']
+__all__ = ['Car',
+           'Controller',
+           'LightSource']

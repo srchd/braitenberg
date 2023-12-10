@@ -10,6 +10,13 @@ from lib.objects.light_source import LightSource
 
 class MainWindow:
     def __init__(self, size: tuple=(500, 500), title: str='Braitenberg Vehicle') -> None:
+        """
+        Initializes the MainWindow class.
+
+        Parameters:
+            size (tuple): Width and Height values for the window.
+            title (str): Window title.
+        """
         self.size = size
         self.title = title
         self.scaling_factor = float(50)
@@ -21,7 +28,6 @@ class MainWindow:
     def _initialize_pygame_window(self) -> None:
         self.surface = pygame.display.set_mode(self.size)
         pygame.display.set_caption(self.title)
-        # self.surface.fill((113, 113, 113))
 
     def _load_checkerboard_image(self) -> None:
         path_to_image = 'images/checkerboard.png'
@@ -29,9 +35,9 @@ class MainWindow:
 
     def _load_objects(self) -> None:
         path_to_car = 'images/car.png'
-        car_x = 0  # self.surface.get_width() / 2
-        car_y = 0  # self.surface.get_height() / 2
-        self.car = Car(car_x, car_y, path_to_car, self.surface)
+        car_x = self.surface.get_width()
+        car_y = self.surface.get_height()
+        self.car = Car(car_x, car_y, path_to_car)
 
         path_to_controller = 'images/controller.png'
         self.controller = Controller(0, 0, path_to_controller)
@@ -40,6 +46,10 @@ class MainWindow:
         self.light_source = LightSource(333, 333, path_to_light_source, 3)
 
     def run(self) -> None:
+        """
+        Main function, which runs the simulation.
+        This will be in a infinite-loop, until the 'X' pressed on the window.
+        """
         finished = False
 
         pygame.init()

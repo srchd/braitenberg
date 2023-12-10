@@ -7,25 +7,39 @@ from lib.utils import create_multi_dimensional_fading_array
 
 class LightSource(DrawableObject):
     def __init__(self, x, y, img_path, radius) -> None:
+        """
+        Initializes the LightSource class.
+        Calls the parent 'DrawableObject' constructor.
+        Sets the radius and the alpha-array to create a fading effect.
+
+        Parameters:
+            x (int): X position of the object.
+            y (int): Y position of the object.
+            img_path (str): The path to the image which represents the object.
+        """
         super().__init__(x, y, img_path)
 
         self.radius = radius
+        # size = radius * 2 + 1 -> the length of the rectangle
+        self.alpha_array = create_multi_dimensional_fading_array(self.radius * 2 + 1, 255, 125)
 
-    def draw(self, surface: pygame.Surface, scaling_factor) -> None:
+    def draw(self, surface: pygame.Surface, scaling_factor: float) -> None:
+        """
+        Draws the LightSource.
+
+        Parameters:
+            surface (pygame.Surface): The surface where the LightSource should be drawn.
+            scaling_factor (float): Represents how much should we scale up the image.
+        """
+
+        # Scaling up the image
         image_width = 1.0
         image_height = 1.0
         base_image_width = int(image_width * scaling_factor)
         base_image_height = int(image_height * scaling_factor)
         light_source = pygame.transform.scale(self.img, (base_image_width, base_image_height))
-        
-        new_rect = light_source.get_rect()
-        new_rect.centerx = self.x
-        new_rect.centery = self.y
 
-        surface.blit(light_source, new_rect)
-
-        alpha_array = create_multi_dimensional_fading_array(self.radius * 2 + 1, 255, 125)
-
+        # Setting the values for the loop
         start_x = int((self.x - light_source.get_width() / 2) - self.radius * light_source.get_width())
         start_y = int((self.y - light_source.get_height() / 2) - self.radius * light_source.get_height())
 
@@ -34,5 +48,11 @@ class LightSource(DrawableObject):
 
         for x in range(start_x, end_x, light_source.get_width()):
             for y in range(start_y, end_y, light_source.get_height()):
-                light_source.set_alpha(alpha_array[int((x - start_x) / light_source.get_width()), int((y - start_y) / light_source.get_width())])
+                alpha_x = int((x - start_x) / light_source.get_width())
+                alpha_y = int((y - start_y) / light_source.get_width())
+
+                light_source.set_alpha(self.alpha_array[alpha_x, alpha_y])
+
                 surface.blit(light_source, (x, y))
+
+        return
